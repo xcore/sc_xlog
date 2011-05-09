@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<xpkg>
+	<dependency repo="xcommon">
+		<githash>
+			e1a96de831569a0083c79a46f6de68801cbf6e31
+		</githash>
+		<uri>
+			ssh://git@github.com/xcore/xcommon
+		</uri>
+	</dependency>
+	<description>
+		A logging component for XC.
+	</description>
+	<location>
+		git@github.com:xcore/sc_xlog.git
+	</location>
+	<name>
+		sc_xlog
+	</name>
+	<release parenthash="1c94e6e30efd3786c522f5c42aa30c1c029ced35" version="1.0.1"/>
+</xpkg>
