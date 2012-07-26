@@ -19,7 +19,7 @@ on stdcore[0] : port uart_tx = PORT_UART_TXD;
 int main() {
   par {
     on stdcore[0] : xlog_server_uart(uart_tx);
-    on stdcore[1] : {
+    on stdcore[0] : {
       timer tmr;
       unsigned int t;
       int i=0;
@@ -32,7 +32,7 @@ int main() {
         i++;
       }
     }
-    on stdcore[2] : {
+    on stdcore[1] : {
       timer tmr;
       unsigned int t;
       int i=0;
@@ -44,7 +44,7 @@ int main() {
         i++;
       }
     }
-    on stdcore[3] : {
+    on stdcore[0] : {
       timer tmr;
       unsigned int t;
       int i=0;
@@ -56,7 +56,7 @@ int main() {
         i++;
       }
     }
-    on stdcore[2] : {
+    on stdcore[1] : {
       timer tmr;
       unsigned int t;
       tmr :> t;

@@ -23,13 +23,7 @@ static void allocate_lock() {
                         : "=r" (lock));
 }
 
-static unsigned client_chanend;
-
-static void allocate_client_chanend() __attribute__ ((constructor));
-
-static void allocate_client_chanend() {
-  client_chanend = _getChanEnd();
-}
+static unsigned client_chanend = 0;
 
 
 static int grab_chanend(int c)
@@ -59,7 +53,7 @@ static int grab_chanend(int c)
    // release all of them again
    for (i = 0; i < curCount; i++)
    {
-      if (grabbed[i] == c) {      
+      if (grabbed[i] == c || grabbed[i] == client_chanend) {
          init_success = 1;
       } else {
          _freeChanEnd(grabbed[i]);         
@@ -244,6 +238,8 @@ int xlog(int term, const char buf[], unsigned count)
                         : "=r" (clobber)
                         : "r" (lock)
                         : "r0");
+  if (!client_chanend)
+    client_chanend = _getChanEnd();
    {
   int c1 = client_chanend;
   int remote_end;
