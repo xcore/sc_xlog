@@ -23,6 +23,15 @@ static void allocate_lock() {
                         : "=r" (lock));
 }
 
+static unsigned client_chanend;
+
+static void allocate_client_chanend() __attribute__ ((constructor));
+
+static void allocate_client_chanend() {
+  client_chanend = _getChanEnd();
+}
+
+
 static int grab_chanend(int c)
 {
   unsigned int grabbed[MAX_CHANEND_COUNT];
@@ -236,19 +245,19 @@ int xlog(int term, const char buf[], unsigned count)
                         : "r" (lock)
                         : "r0");
    {
-  int c1 = _getChanEnd();
+  int c1 = client_chanend;
   int remote_end;
   int i;
   int timed_out = 0;
   _setChanEndDest(c1, XLOG_SERVER_CHANEND);
   _outInt(c1, c1);
-  _outCT(c1, XS1_CT_END);    
+  _outCT(c1, XS1_CT_END);
 
   timed_out = xlog_get_server_response(c1, &server_up_flag);
 
   if (!timed_out) {
     (void) _inCT(c1);
-    remote_end = _inInt(c1);    
+    remote_end = _inInt(c1);
     (void) _inCT(c1);
     if (remote_end != 0) {
       _setChanEndDest(c1, remote_end);
@@ -259,7 +268,6 @@ int xlog(int term, const char buf[], unsigned count)
       (void) _inCT(c1);
     }
   }
-  _freeChanEnd(c1);
   }
   __asm__ __volatile__ ("out res[%0], %0"
                         : /* no output */
